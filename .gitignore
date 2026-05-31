@@ -1,0 +1,6 @@
+risque_env/
+__pycache__/
+*.pyc
+*.pyo
+.env
+*.log

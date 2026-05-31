@@ -1,0 +1,179 @@
+{% extends "incidents/base.html" %}
+{% block title %}{% if mode == "create" %}Nouveau incident{% else %}Modifier #{{ incident.pk }}{% endif %} | BAGRI{% endblock %}
+
+{% block content %}
+<div class="pagehead">
+  <div>
+    <h1><i class="bi bi-{% if mode == 'create' %}plus-circle{% else %}pencil-square{% endif %}" aria-label="{% if mode == 'create' %}Ajouter{% else %}Modifier{% endif %}"></i>
+      {% if mode == "create" %}Déclarer un incident{% else %}Modifier l'incident #{{ incident.pk }}{% endif %}
+    </h1>
+    <p class="muted">{% if mode == "create" %}Renseignez le formulaire. Il sera transmis à votre chef de direction pour validation.{% else %}Modification avant validation chef.{% endif %}</p>
+  </div>
+  <div class="pagehead__actions">
+    {% if mode == "edit" %}<a class="btn" href="{% url 'incidents:detail' incident.pk %}" title="Annuler et retourner au détail"><i class="bi bi-x-lg" aria-label="Annuler"></i> Annuler</a>
+    {% else %}<a class="btn" href="{% url 'incidents:list' %}" title="Annuler et retourner à la liste"><i class="bi bi-x-lg" aria-label="Annuler"></i> Annuler</a>{% endif %}
+  </div>
+</div>
+
+<form method="post" novalidate>
+  {% csrf_token %}
+  {% if form.non_field_errors %}<div class="alert alert--danger">{{ form.non_field_errors }}</div>{% endif %}
+
+  <div class="card form" style="margin-bottom:14px">
+    <h2><i class="bi bi-calendar3" aria-label="Dates générales"></i> Informations générales</h2>
+    <div class="grid">
+      <div class="field"><label>Version</label>{{ form.version }}</div>
+      <div class="field"><label>Date de déclaration *</label>{{ form.date_declaration }}</div>
+      <div class="field"><label>Date de mise à jour</label>{{ form.date_mise_a_jour }}</div>
+    </div>
+  </div>
+
+  <div class="card form" style="margin-bottom:14px">
+    <h2><i class="bi bi-person-badge" aria-label="Déclarant"></i> Rattachement & Déclarant</h2>
+    <div class="grid">
+      <div class="field"><label>Agence</label>{{ form.agence }}</div>
+      <div class="field"><label>Région</label>{{ form.region }}</div>
+      <div class="field"><label>Direction</label>{{ form.direction }}</div>
+      <div class="field"><label>Nom & Prénom</label>{{ form.nom_prenom_declarant }}</div>
+      <div class="field"><label>Fonction</label>{{ form.fonction }}</div>
+      <div class="field"><label>Téléphone</label>{{ form.poste_telephonique }}</div>
+      <div class="field field--full"><label>Email *</label>{{ form.email }}{% if form.email.errors %}<small style="color:#fca5a5">{{ form.email.errors }}</small>{% endif %}</div>
+    </div>
+  </div>
+
+  <div class="card form" style="margin-bottom:14px">
+    <h2><i class="bi bi-file-text" aria-label="Description"></i> Description de l'incident</h2>
+    <div class="grid">
+      <div class="field"><label>Date début incident</label>{{ form.date_debut_incident }}</div>
+      <div class="field"><label>Date de découverte</label>{{ form.date_decouverte_incident }}</div>
+    </div>
+    <div class="field field--full" style="margin-top:12px"><label>Description détaillée *</label>{{ form.description }}</div>
+  </div>
+
+  <div class="card form" style="margin-bottom:14px">
+    <h2><i class="bi bi-tags" aria-label="Qualification"></i> Qualification</h2>
+    <div class="grid">
+      <div class="field"><label>Risque crédit lié</label>{{ form.incident_lie_risque_credit }}</div>
+      <div class="field"><label>Catégorisation Bâloise</label>{{ form.categorisation_baloise }}</div>
+      <div class="field"><label>Sous-catégorie</label>{{ form.sous_categorie_incident }}</div>
+      <div class="field"><label>Macro processus</label>{{ form.macro_processus }}</div>
+      <div class="field"><label>Processus</label>{{ form.processus }}</div>
+      <div class="field"><label>Domaine d'activité</label>{{ form.domaine_activite }}</div>
+      <div class="field"><label>Incident SI</label>{{ form.incident_si }}</div>
+      <div class="field"><label>Non conformité</label>{{ form.incident_non_conformite }}</div>
+      <div class="field"><label>Criticité</label>{{ form.criticite }}</div>
+      <div class="field"><label>Impact PCA</label>{{ form.impact_pca }}</div>
+      <div class="field"><label>Statut incident</label>{{ form.statut_incident }}</div>
+    </div>
+  </div>
+
+  <div class="card form" style="margin-bottom:14px">
+    <h2><i class="bi bi-currency-exchange" aria-label="Finances"></i> Impacts financiers</h2>
+    <div class="grid">
+      <div class="field"><label>Montant estimé perte (FCFA)</label>{{ form.montant_estime_perte }}</div>
+      <div class="field"><label>Comptabilisation perte</label>{{ form.comptabilisation_perte }}</div>
+      <div class="field"><label>Date comptabilisation</label>{{ form.date_comptabilisation_perte }}</div>
+      <div class="field"><label>Montant récupérations</label>{{ form.montant_recuperations }}</div>
+      <div class="field"><label>Date récupération</label>{{ form.date_recuperation }}</div>
+      <div class="field"><label>Nature récupération</label>{{ form.nature_recuperation }}</div>
+      <div class="field"><label>Montant net perte</label>{{ form.montant_net_perte }}</div>
+      <div class="field"><label>Date butoire résolution</label>{{ form.date_butoire_resolution }}</div>
+    </div>
+    <div class="field field--full" style="margin-top:12px"><label>Commentaires</label>{{ form.commentaires }}</div>
+  </div>
+
+  <!-- Mesures immédiates -->
+  <div class="card form" style="margin-bottom:14px">
+    <h2><i class="bi bi-lightning-charge" aria-label="Mesures"></i> Mesures immédiates prises</h2>
+    {{ mesures_formset.management_form }}
+    <div id="mesures-container">
+      {% for mf in mesures_formset %}
+      <div class="formset-row">
+        <button type="button" class="delete-row" onclick="toggleDelete(this,'{{ mf.DELETE.id_for_label }}')" title="Supprimer cette mesure">
+          <i class="bi bi-x" aria-label="Supprimer"></i>
+        </button>
+        {{ mf.id }}{{ mf.DELETE }}
+        <div class="grid">
+          <div class="field"><label>N°</label>{{ mf.numero }}</div>
+          <div class="field"><label>Mesure</label>{{ mf.mesure }}</div>
+          <div class="field"><label>Responsable</label>{{ mf.responsable_mise_en_place }}</div>
+          <div class="field"><label>Direction/Service</label>{{ mf.direction_service_responsable }}</div>
+          <div class="field"><label>Date mise en place</label>{{ mf.date_mise_en_place }}</div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <button type="button" class="add-row" onclick="addFormsetRow('mesures-container','{{ mesures_formset.prefix }}')" title="Ajouter une nouvelle mesure">
+      <i class="bi bi-plus-lg" aria-label="Ajouter"></i> Ajouter une mesure
+    </button>
+  </div>
+
+  <!-- Actions correctives -->
+  <div class="card form" style="margin-bottom:14px">
+    <h2><i class="bi bi-tools" aria-label="Actions"></i> Actions correctives proposées</h2>
+    {{ actions_formset.management_form }}
+    <div id="actions-container">
+      {% for af in actions_formset %}
+      <div class="formset-row">
+        <button type="button" class="delete-row" onclick="toggleDelete(this,'{{ af.DELETE.id_for_label }}')" title="Supprimer cette action">
+          <i class="bi bi-x" aria-label="Supprimer"></i>
+        </button>
+        {{ af.id }}{{ af.DELETE }}
+        <div class="grid">
+          <div class="field"><label>N°</label>{{ af.numero }}</div>
+          <div class="field"><label>Action</label>{{ af.action }}</div>
+          <div class="field"><label>Responsable</label>{{ af.responsable_mise_en_place }}</div>
+          <div class="field"><label>Direction/Service</label>{{ af.direction_service_responsable }}</div>
+          <div class="field"><label>Statut action</label>{{ af.statut_action }}</div>
+          <div class="field"><label>Délai</label>{{ af.delai_mise_en_place }}</div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <button type="button" class="add-row" onclick="addFormsetRow('actions-container','{{ actions_formset.prefix }}')" title="Ajouter une nouvelle action">
+      <i class="bi bi-plus-lg" aria-label="Ajouter"></i> Ajouter une action
+    </button>
+  </div>
+
+  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:4px">
+    {% if mode == "edit" %}<a class="btn" href="{% url 'incidents:detail' incident.pk %}" title="Annuler les modifications"><i class="bi bi-x-lg" aria-label="Annuler"></i> Annuler</a>
+    {% else %}<a class="btn" href="{% url 'incidents:list' %}" title="Annuler la création"><i class="bi bi-x-lg" aria-label="Annuler"></i> Annuler</a>{% endif %}
+    <button class="btn btn--primary btn--lg" type="submit" title="{% if mode == 'create' %}Envoyer au chef pour validation{% else %}Enregistrer les modifications{% endif %}">
+      <i class="bi bi-{% if mode == 'create' %}send{% else %}check-lg{% endif %}" aria-label="{% if mode == 'create' %}Envoyer{% else %}Enregistrer{% endif %}"></i>
+      {% if mode == "create" %}Envoyer au chef pour validation{% else %}Enregistrer les modifications{% endif %}
+    </button>
+  </div>
+</form>
+
+<script>
+function toggleDelete(btn, deleteId) {
+  const chk = document.getElementById(deleteId);
+  if (!chk) return;
+  chk.checked = !chk.checked;
+  btn.closest('.formset-row').style.opacity = chk.checked ? '0.4' : '1';
+}
+function addFormsetRow(containerId, prefix) {
+  const container = document.getElementById(containerId);
+  const totalInput = document.querySelector('[name="' + prefix + '-TOTAL_FORMS"]');
+  const rows = container.querySelectorAll('.formset-row');
+  if (!rows.length) return;
+  const count = parseInt(totalInput.value);
+  const newRow = rows[rows.length - 1].cloneNode(true);
+  newRow.style.opacity = '1';
+  newRow.querySelectorAll('input,select,textarea').forEach(el => {
+    el.name = el.name.replace(/-\d+-/, '-' + count + '-');
+    el.id   = el.id.replace(/-\d+-/, '-' + count + '-');
+    if (el.type !== 'checkbox' && el.type !== 'hidden') el.value = '';
+    if (el.type === 'checkbox') el.checked = false;
+  });
+  newRow.querySelectorAll('label').forEach(el => {
+    if (el.htmlFor) el.htmlFor = el.htmlFor.replace(/-\d+-/, '-' + count + '-');
+  });
+  const delCbk = newRow.querySelector('input[type="checkbox"]');
+  const delBtn = newRow.querySelector('.delete-row');
+  if (delBtn && delCbk) delBtn.setAttribute('onclick', "toggleDelete(this,'" + delCbk.id + "')");
+  container.appendChild(newRow);
+  totalInput.value = count + 1;
+}
+</script>
+{% endblock %}

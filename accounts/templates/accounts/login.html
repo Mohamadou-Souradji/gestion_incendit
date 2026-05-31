@@ -1,0 +1,31 @@
+{% extends "incidents/base.html" %}
+{% block title %}Connexion | BAGRI{% endblock %}
+{% block content %}
+<div class="login-wrap">
+  <div class="login-card">
+    <div style="text-align:center;margin-bottom:28px">
+      <h1><i class="bi bi-shield-lock" aria-label="Sécurité"></i> Connexion</h1>
+      <p class="muted">Authentifiez-vous pour accéder à la plateforme.</p>
+    </div>
+    <div class="card">
+      <form method="post">
+        {% csrf_token %}
+        {% if form.non_field_errors %}<div class="alert alert--danger">{{ form.non_field_errors }}</div>{% endif %}
+        <div class="field" style="margin-bottom:14px">
+            <label><i class="bi bi-person" aria-label="Utilisateur"></i> Nom d'utilisateur</label>
+          {{ form.username }}
+          {% if form.username.errors %}<small style="color:#fca5a5">{{ form.username.errors }}</small>{% endif %}
+        </div>
+        <div class="field" style="margin-bottom:20px">
+            <label><i class="bi bi-key" aria-label="Clé"></i> Mot de passe</label>
+          {{ form.password }}
+          {% if form.password.errors %}<small style="color:#fca5a5">{{ form.password.errors }}</small>{% endif %}
+        </div>
+          <button class="btn btn--primary btn--lg" type="submit" style="width:100%" title="Se connecter au système">
+            <i class="bi bi-box-arrow-in-right" aria-label="Connexion"></i> Se connecter
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

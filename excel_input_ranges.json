@@ -1,0 +1,534 @@
+{
+  "xlsx_path": "c:\\Users\\abous\\Downloads\\remonté d'incident opérationnel-12.xlsx",
+  "sheet": "Fiche de remontée ",
+  "merged_input_ranges": [
+    {
+      "range": "J9:L10",
+      "top_left": "J9",
+      "row": 9,
+      "col": 10,
+      "label_guess": "Date de déclaration :",
+      "size": {
+        "rows": 2,
+        "cols": 3
+      }
+    },
+    {
+      "range": "J11:L11",
+      "top_left": "J11",
+      "row": 11,
+      "col": 10,
+      "label_guess": "Date de la mise à jour :",
+      "size": {
+        "rows": 1,
+        "cols": 3
+      }
+    },
+    {
+      "range": "F16:H16",
+      "top_left": "F16",
+      "row": 16,
+      "col": 6,
+      "label_guess": "Agence :",
+      "size": {
+        "rows": 1,
+        "cols": 3
+      }
+    },
+    {
+      "range": "F17:H17",
+      "top_left": "F17",
+      "row": 17,
+      "col": 6,
+      "label_guess": "Région :",
+      "size": {
+        "rows": 1,
+        "cols": 3
+      }
+    },
+    {
+      "range": "F18:H18",
+      "top_left": "F18",
+      "row": 18,
+      "col": 6,
+      "label_guess": "Direction le cas Echéant :",
+      "size": {
+        "rows": 1,
+        "cols": 3
+      }
+    },
+    {
+      "range": "F20:H20",
+      "top_left": "F20",
+      "row": 20,
+      "col": 6,
+      "label_guess": "Nom Prénom du déclarant :",
+      "size": {
+        "rows": 1,
+        "cols": 3
+      }
+    },
+    {
+      "range": "F21:H21",
+      "top_left": "F21",
+      "row": 21,
+      "col": 6,
+      "label_guess": "Fonction :",
+      "size": {
+        "rows": 1,
+        "cols": 3
+      }
+    },
+    {
+      "range": "F22:H22",
+      "top_left": "F22",
+      "row": 22,
+      "col": 6,
+      "label_guess": "Poste téléphonique :",
+      "size": {
+        "rows": 1,
+        "cols": 3
+      }
+    },
+    {
+      "range": "F23:H23",
+      "top_left": "F23",
+      "row": 23,
+      "col": 6,
+      "label_guess": "Email (obligatoire) :",
+      "size": {
+        "rows": 1,
+        "cols": 3
+      }
+    },
+    {
+      "range": "F28:H28",
+      "top_left": "F28",
+      "row": 28,
+      "col": 6,
+      "label_guess": "Date de début de l'incident :",
+      "size": {
+        "rows": 1,
+        "cols": 3
+      }
+    },
+    {
+      "range": "F29:H29",
+      "top_left": "F29",
+      "row": 29,
+      "col": 6,
+      "label_guess": "Date de découvert de l'incident :",
+      "size": {
+        "rows": 1,
+        "cols": 3
+      }
+    },
+    {
+      "range": "C32:L34",
+      "top_left": "C32",
+      "row": 32,
+      "col": 3,
+      "label_guess": null,
+      "size": {
+        "rows": 3,
+        "cols": 10
+      }
+    },
+    {
+      "range": "F38:H38",
+      "top_left": "F38",
+      "row": 38,
+      "col": 6,
+      "label_guess": "Incident lié au risque de crédit :",
+      "size": {
+        "rows": 1,
+        "cols": 3
+      }
+    },
+    {
+      "range": "F39:H39",
+      "top_left": "F39",
+      "row": 39,
+      "col": 6,
+      "label_guess": "Catégorisation Baloises de Risques :",
+      "size": {
+        "rows": 1,
+        "cols": 3
+      }
+    },
+    {
+      "range": "F40:H40",
+      "top_left": "F40",
+      "row": 40,
+      "col": 6,
+      "label_guess": "Sous catégories d'incidents :",
+      "size": {
+        "rows": 1,
+        "cols": 3
+      }
+    },
+    {
+      "range": "F41:H41",
+      "top_left": "F41",
+      "row": 41,
+      "col": 6,
+      "label_guess": "Macro Processus :",
+      "size": {
+        "rows": 1,
+        "cols": 3
+      }
+    },
+    {
+      "range": "F42:H42",
+      "top_left": "F42",
+      "row": 42,
+      "col": 6,
+      "label_guess": "Processus :",
+      "size": {
+        "rows": 1,
+        "cols": 3
+      }
+    },
+    {
+      "range": "F43:H43",
+      "top_left": "F43",
+      "row": 43,
+      "col": 6,
+      "label_guess": "Domaine d'activité :",
+      "size": {
+        "rows": 1,
+        "cols": 3
+      }
+    },
+    {
+      "range": "F44:H44",
+      "top_left": "F44",
+      "row": 44,
+      "col": 6,
+      "label_guess": "Incident SI :",
+      "size": {
+        "rows": 1,
+        "cols": 3
+      }
+    },
+    {
+      "range": "F45:H45",
+      "top_left": "F45",
+      "row": 45,
+      "col": 6,
+      "label_guess": "Incident de non conformité :",
+      "size": {
+        "rows": 1,
+        "cols": 3
+      }
+    },
+    {
+      "range": "F49:H49",
+      "top_left": "F49",
+      "row": 49,
+      "col": 6,
+      "label_guess": "Montant estimé de la perte (TTC/HT) :",
+      "size": {
+        "rows": 1,
+        "cols": 3
+      }
+    },
+    {
+      "range": "F50:H50",
+      "top_left": "F50",
+      "row": 50,
+      "col": 6,
+      "label_guess": "Comptabilisation de la perte",
+      "size": {
+        "rows": 1,
+        "cols": 3
+      }
+    },
+    {
+      "range": "F51:H51",
+      "top_left": "F51",
+      "row": 51,
+      "col": 6,
+      "label_guess": "Si oui  Date de comptabilisation de la perte:",
+      "size": {
+        "rows": 1,
+        "cols": 3
+      }
+    },
+    {
+      "range": "F52:H52",
+      "top_left": "F52",
+      "row": 52,
+      "col": 6,
+      "label_guess": "Montant des récupérations obtenues  (TTC/HT) :",
+      "size": {
+        "rows": 1,
+        "cols": 3
+      }
+    },
+    {
+      "range": "F53:H53",
+      "top_left": "F53",
+      "row": 53,
+      "col": 6,
+      "label_guess": "Date de la récupération:",
+      "size": {
+        "rows": 1,
+        "cols": 3
+      }
+    },
+    {
+      "range": "F54:H54",
+      "top_left": "F54",
+      "row": 54,
+      "col": 6,
+      "label_guess": "Nature de la récupération:",
+      "size": {
+        "rows": 1,
+        "cols": 3
+      }
+    },
+    {
+      "range": "F55:H55",
+      "top_left": "F55",
+      "row": 55,
+      "col": 6,
+      "label_guess": "Montant net de la perte (TTC/HT) :",
+      "size": {
+        "rows": 1,
+        "cols": 3
+      }
+    },
+    {
+      "range": "C58:L62",
+      "top_left": "C58",
+      "row": 58,
+      "col": 3,
+      "label_guess": null,
+      "size": {
+        "rows": 5,
+        "cols": 10
+      }
+    },
+    {
+      "range": "C63:L63",
+      "top_left": "C63",
+      "row": 63,
+      "col": 3,
+      "label_guess": null,
+      "size": {
+        "rows": 1,
+        "cols": 10
+      }
+    },
+    {
+      "range": "C65:L65",
+      "top_left": "C65",
+      "row": 65,
+      "col": 3,
+      "label_guess": null,
+      "size": {
+        "rows": 1,
+        "cols": 10
+      }
+    },
+    {
+      "range": "D68:F68",
+      "top_left": "D68",
+      "row": 68,
+      "col": 4,
+      "label_guess": null,
+      "size": {
+        "rows": 1,
+        "cols": 3
+      }
+    },
+    {
+      "range": "G68:H68",
+      "top_left": "G68",
+      "row": 68,
+      "col": 7,
+      "label_guess": null,
+      "size": {
+        "rows": 1,
+        "cols": 2
+      }
+    },
+    {
+      "range": "I68:J68",
+      "top_left": "I68",
+      "row": 68,
+      "col": 9,
+      "label_guess": null,
+      "size": {
+        "rows": 1,
+        "cols": 2
+      }
+    },
+    {
+      "range": "C69:L69",
+      "top_left": "C69",
+      "row": 69,
+      "col": 3,
+      "label_guess": null,
+      "size": {
+        "rows": 1,
+        "cols": 10
+      }
+    },
+    {
+      "range": "D72:F72",
+      "top_left": "D72",
+      "row": 72,
+      "col": 4,
+      "label_guess": "1",
+      "size": {
+        "rows": 1,
+        "cols": 3
+      }
+    },
+    {
+      "range": "G72:H72",
+      "top_left": "G72",
+      "row": 72,
+      "col": 7,
+      "label_guess": "1",
+      "size": {
+        "rows": 1,
+        "cols": 2
+      }
+    },
+    {
+      "range": "I72:J72",
+      "top_left": "I72",
+      "row": 72,
+      "col": 9,
+      "label_guess": "1",
+      "size": {
+        "rows": 1,
+        "cols": 2
+      }
+    },
+    {
+      "range": "D73:F73",
+      "top_left": "D73",
+      "row": 73,
+      "col": 4,
+      "label_guess": null,
+      "size": {
+        "rows": 1,
+        "cols": 3
+      }
+    },
+    {
+      "range": "G73:H73",
+      "top_left": "G73",
+      "row": 73,
+      "col": 7,
+      "label_guess": null,
+      "size": {
+        "rows": 1,
+        "cols": 2
+      }
+    },
+    {
+      "range": "I73:J73",
+      "top_left": "I73",
+      "row": 73,
+      "col": 9,
+      "label_guess": null,
+      "size": {
+        "rows": 1,
+        "cols": 2
+      }
+    },
+    {
+      "range": "D74:F74",
+      "top_left": "D74",
+      "row": 74,
+      "col": 4,
+      "label_guess": null,
+      "size": {
+        "rows": 1,
+        "cols": 3
+      }
+    },
+    {
+      "range": "G74:H74",
+      "top_left": "G74",
+      "row": 74,
+      "col": 7,
+      "label_guess": null,
+      "size": {
+        "rows": 1,
+        "cols": 2
+      }
+    },
+    {
+      "range": "I74:J74",
+      "top_left": "I74",
+      "row": 74,
+      "col": 9,
+      "label_guess": null,
+      "size": {
+        "rows": 1,
+        "cols": 2
+      }
+    },
+    {
+      "range": "C75:L75",
+      "top_left": "C75",
+      "row": 75,
+      "col": 3,
+      "label_guess": null,
+      "size": {
+        "rows": 1,
+        "cols": 10
+      }
+    },
+    {
+      "range": "F81:I81",
+      "top_left": "F81",
+      "row": 81,
+      "col": 6,
+      "label_guess": "Date  butoire de résolution de l'incident",
+      "size": {
+        "rows": 1,
+        "cols": 4
+      }
+    },
+    {
+      "range": "F83:I84",
+      "top_left": "F83",
+      "row": 83,
+      "col": 6,
+      "label_guess": "Commentaires",
+      "size": {
+        "rows": 2,
+        "cols": 4
+      }
+    },
+    {
+      "range": "I87:L87",
+      "top_left": "I87",
+      "row": 87,
+      "col": 9,
+      "label_guess": "OK / KO",
+      "size": {
+        "rows": 1,
+        "cols": 4
+      }
+    },
+    {
+      "range": "I91:L91",
+      "top_left": "I91",
+      "row": 91,
+      "col": 9,
+      "label_guess": "OK / KO",
+      "size": {
+        "rows": 1,
+        "cols": 4
+      }
+    }
+  ]
+}

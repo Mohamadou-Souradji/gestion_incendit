@@ -1,0 +1,76 @@
+{% load static %}
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>{% block title %}BAGRI – Incidents{% endblock %}</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="{% static 'app.css' %}"/>
+</head>
+<body>
+<header class="topbar">
+  <div class="container topbar__inner">
+    <a class="brand" href="{% url 'incidents:list' %}">
+      <img class="brand__logo" src="{% static 'img/bagri.png' %}" alt="BAGRI"/>
+      <div>
+        <div class="brand__title">BAGRI</div>
+        <div class="brand__subtitle">Gestion des Incidents Opérationnels</div>
+      </div>
+    </a>
+
+    <nav class="topnav">
+      {% if request.user.is_authenticated %}
+        {% with p=request.user.profile %}
+
+          {% if p.is_declarant or p.is_admin %}
+            <a class="btn" href="{% url 'incidents:list' %}" title="Voir la liste de vos incidents déclarés"><i class="bi bi-list-ul" aria-label="Liste"></i> Mes incidents</a>
+            <a class="btn btn--primary" href="{% url 'incidents:create' %}" title="Déclarer un nouvel incident"><i class="bi bi-plus-lg" aria-label="Ajouter"></i> Déclarer</a>
+          {% endif %}
+
+          {% if p.is_chef %}
+            <a class="btn" href="{% url 'incidents:list' %}" title="Incidents en attente de validation"><i class="bi bi-check2-square" aria-label="Validation"></i> À valider</a>
+          {% endif %}
+
+          {% if p.is_risques_op %}
+            <a class="btn" href="{% url 'incidents:list' %}" title="Incidents assignés à votre équipe"><i class="bi bi-inbox" aria-label="Affectations"></i> Mes affectations</a>
+          {% endif %}
+
+          {% if p.is_dir_risques %}
+            <a class="btn" href="{% url 'incidents:list' %}" title="Consulter tous les incidents"><i class="bi bi-list-ul" aria-label="Incidents"></i> Incidents</a>
+            <a class="btn" href="{% url 'incidents:risques' %}" title="Accéder au tableau de bord analytique"><i class="bi bi-speedometer2" aria-label="Tableau de bord"></i> Tableau de bord</a>
+            <a class="btn" href="{% url 'accounts:user_list' %}" title="Gérer les utilisateurs du système"><i class="bi bi-people" aria-label="Utilisateurs"></i> Utilisateurs</a>
+          {% endif %}
+
+          {% if p.is_admin %}
+            <a class="btn" href="{% url 'incidents:risques' %}" title="Accéder au tableau de bord administrateur"><i class="bi bi-speedometer2" aria-label="Dashboard"></i> Dashboard</a>
+            <a class="btn" href="{% url 'accounts:user_list' %}" title="Gérer les comptes utilisateurs"><i class="bi bi-people" aria-label="Utilisateurs"></i> Utilisateurs</a>
+          {% endif %}
+
+          <div class="user-info">
+            <div class="user-avatar" title="Initiale de votre nom">{{ request.user.username|first|upper }}</div>
+            <span class="role-pill" title="Votre rôle dans le système">{{ p.get_role_display|truncatechars:22 }}</span>
+          </div>
+          <a class="btn btn--sm" href="{% url 'accounts:logout' %}" title="Se déconnecter"><i class="bi bi-box-arrow-right" aria-label="Déconnexion"></i> Déconnexion</a>
+
+        {% endwith %}
+      {% endif %}
+    </nav>
+  </div>
+</header>
+
+<main class="container" style="padding-top:8px;padding-bottom:48px;">
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert {% if message.tags == 'success' %}alert--success{% elif message.tags == 'error' %}alert--danger{% else %}alert--warning{% endif %}" style="margin-top:14px">
+        {% if message.tags == 'success' %}<i class="bi bi-check-circle-fill" aria-label="Succès"></i>
+        {% elif message.tags == 'error' %}<i class="bi bi-x-circle-fill" aria-label="Erreur"></i>
+        {% else %}<i class="bi bi-exclamation-triangle-fill" aria-label="Attention"></i>{% endif %}
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+  {% block content %}{% endblock %}
+</main>
+</body>
+</html>

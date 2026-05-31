@@ -1,0 +1,177 @@
+{% extends "incidents/base.html" %}
+{% block title %}Incident #{{ incident.pk }} | BAGRI{% endblock %}
+
+{% block content %}
+<div class="pagehead">
+  <div>
+    <h1><i class="bi bi-file-earmark-text" aria-label="Incident"></i> Incident <span style="color:var(--primary)">#{{ incident.pk }}</span></h1>
+    <p class="muted">Créé le {{ incident.created_at|date:"d/m/Y H:i" }} — mis à jour le {{ incident.updated_at|date:"d/m/Y H:i" }}</p>
+  </div>
+  <div class="pagehead__actions">
+    {% if profile.is_declarant and incident.declarant == request.user and incident.validation_chef == "EN_ATTENTE" %}
+      <a class="btn btn--primary" href="{% url 'incidents:edit' incident.pk %}" title="Modifier cet incident"><i class="bi bi-pencil" aria-label="Modifier"></i> Modifier</a>
+    {% endif %}
+    {% if profile.is_admin %}
+      <a class="btn btn--primary" href="{% url 'incidents:edit' incident.pk %}" title="Modifier cet incident"><i class="bi bi-pencil" aria-label="Modifier"></i> Modifier</a>
+    {% endif %}
+    {% if profile.is_chef and incident.direction == profile.direction and incident.validation_chef == "EN_ATTENTE" %}
+      <a class="btn btn--warning" href="{% url 'incidents:chef_validate' incident.pk %}" title="Valider ou rejeter cet incident"><i class="bi bi-clipboard2-check" aria-label="Valider"></i> Valider / Rejeter</a>
+    {% endif %}
+    {% if profile.is_dir_risques or profile.is_admin %}
+      {% if incident.validation_chef == "VALIDE" %}
+        <a class="btn btn--primary" href="{% url 'incidents:affecter' incident.pk %}" title="Assigner un agent de traitement"><i class="bi bi-person-plus" aria-label="Affecter"></i> Affecter</a>
+      {% endif %}
+    {% endif %}
+    <a class="btn" href="{% url 'incidents:export_one_csv' incident.pk %}" title="Exporter en CSV"><i class="bi bi-filetype-csv" aria-label="CSV"></i></a>
+    <a class="btn" href="{% url 'incidents:export_one_xlsx' incident.pk %}" title="Exporter en Excel"><i class="bi bi-file-earmark-excel" aria-label="Excel"></i></a>
+    <a class="btn" href="{% url 'incidents:export_one_pdf' incident.pk %}" title="Exporter en PDF"><i class="bi bi-file-earmark-pdf" aria-label="PDF"></i></a>
+    <a class="btn" href="{% url 'incidents:list' %}" title="Retourner à la liste"><i class="bi bi-arrow-left" aria-label="Retour"></i> Retour</a>
+  </div>
+</div>
+
+<!-- Badges statut -->
+<div style="display:flex;gap:10px;align-items:center;margin-bottom:18px;flex-wrap:wrap">
+  <span class="badge {{ incident.badge_validation }}" style="font-size:13px;padding:5px 12px" title="Décision du chef de direction">
+    <i class="bi bi-{% if incident.validation_chef == 'VALIDE' %}check-circle-fill{% elif incident.validation_chef == 'REJETE' %}x-circle-fill{% else %}clock{% endif %}" aria-label="État de validation"></i>
+    Chef : {{ incident.get_validation_chef_display }}
+  </span>
+  {% if incident.criticite %}
+    <span class="badge {% if 'ÉLEVÉE' in incident.criticite or 'HAUTE' in incident.criticite %}badge--danger{% elif 'MOYENNE' in incident.criticite %}badge--warning{% else %}badge--info{% endif %}" style="font-size:13px;padding:5px 12px" title="Niveau de criticité">
+      <i class="bi bi-exclamation-triangle" aria-label="Criticité"></i> {{ incident.criticite }}
+    </span>
+  {% endif %}
+  {% if incident.agent_affecte %}
+    <span class="badge badge--success" style="font-size:13px;padding:5px 12px" title="Agent responsable du traitement">
+      <i class="bi bi-person-check-fill" aria-label="Agent assigné"></i> Agent : {{ incident.agent_affecte.get_full_name|default:incident.agent_affecte.username }}
+    </span>
+  {% elif incident.validation_chef == "VALIDE" %}
+    <span class="badge badge--muted" style="font-size:13px;padding:5px 12px" title="En attente d'affectation">
+      <i class="bi bi-person-dash" aria-label="Non assigné"></i> Non affecté
+    </span>
+  {% endif %}
+</div>
+
+<!-- Informations -->
+<div class="card" style="margin-bottom:14px">
+  <div class="section-title"><i class="bi bi-card-text" aria-label="Identification"></i> Identification</div>
+  <div class="dl">
+    <div class="dl-item"><dt>Version</dt><dd>{{ incident.version|default:"—" }}</dd></div>
+    <div class="dl-item"><dt>Date déclaration</dt><dd>{{ incident.date_declaration|default:"—" }}</dd></div>
+    <div class="dl-item"><dt>Date mise à jour</dt><dd>{{ incident.date_mise_a_jour|default:"—" }}</dd></div>
+    <div class="dl-item"><dt>Agence</dt><dd>{{ incident.agence|default:"—" }}</dd></div>
+    <div class="dl-item"><dt>Région</dt><dd>{{ incident.region|default:"—" }}</dd></div>
+    <div class="dl-item"><dt>Direction</dt><dd>{{ incident.direction|default:"—" }}</dd></div>
+    <div class="dl-item"><dt>Déclarant</dt><dd>{{ incident.nom_prenom_declarant|default:"—" }}</dd></div>
+    <div class="dl-item"><dt>Fonction</dt><dd>{{ incident.fonction|default:"—" }}</dd></div>
+    <div class="dl-item"><dt>Téléphone</dt><dd>{{ incident.poste_telephonique|default:"—" }}</dd></div>
+    <div class="dl-item"><dt>Email</dt><dd>{{ incident.email|default:"—" }}</dd></div>
+  </div>
+</div>
+
+<div class="card" style="margin-bottom:14px">
+  <div class="section-title"><i class="bi bi-file-text" aria-label="Description"></i> Description de l'incident</div>
+  <div class="dl">
+    <div class="dl-item"><dt>Date début</dt><dd>{{ incident.date_debut_incident|default:"—" }}</dd></div>
+    <div class="dl-item"><dt>Date découverte</dt><dd>{{ incident.date_decouverte_incident|default:"—" }}</dd></div>
+    <div class="dl-item" style="grid-column:1/-1"><dt>Description</dt><dd class="pre">{{ incident.description|default:"—" }}</dd></div>
+  </div>
+</div>
+
+<div class="card" style="margin-bottom:14px">
+  <div class="section-title"><i class="bi bi-tags" aria-label="Qualification"></i> Qualification</div>
+  <div class="dl">
+    <div class="dl-item"><dt>Risque crédit</dt><dd>{{ incident.incident_lie_risque_credit|default:"—" }}</dd></div>
+    <div class="dl-item"><dt>Catégorisation Bâloise</dt><dd>{{ incident.categorisation_baloise|default:"—" }}</dd></div>
+    <div class="dl-item"><dt>Sous-catégorie</dt><dd>{{ incident.sous_categorie_incident|default:"—" }}</dd></div>
+    <div class="dl-item"><dt>Macro Processus</dt><dd>{{ incident.macro_processus|default:"—" }}</dd></div>
+    <div class="dl-item"><dt>Processus</dt><dd>{{ incident.processus|default:"—" }}</dd></div>
+    <div class="dl-item"><dt>Domaine d'activité</dt><dd>{{ incident.domaine_activite|default:"—" }}</dd></div>
+    <div class="dl-item"><dt>Incident SI</dt><dd>{{ incident.incident_si|default:"—" }}</dd></div>
+    <div class="dl-item"><dt>Non conformité</dt><dd>{{ incident.incident_non_conformite|default:"—" }}</dd></div>
+  </div>
+</div>
+
+<div class="card" style="margin-bottom:14px">
+  <div class="section-title"><i class="bi bi-currency-exchange" aria-label="Finances"></i> Impacts financiers</div>
+  <div class="dl">
+    <div class="dl-item"><dt>Montant estimé perte</dt><dd>{{ incident.montant_estime_perte|default:"—" }}</dd></div>
+    <div class="dl-item"><dt>Comptabilisation</dt><dd>{{ incident.comptabilisation_perte|default:"—" }}</dd></div>
+    <div class="dl-item"><dt>Date comptabilisation</dt><dd>{{ incident.date_comptabilisation_perte|default:"—" }}</dd></div>
+    <div class="dl-item"><dt>Montant récupérations</dt><dd>{{ incident.montant_recuperations|default:"—" }}</dd></div>
+    <div class="dl-item"><dt>Date récupération</dt><dd>{{ incident.date_recuperation|default:"—" }}</dd></div>
+    <div class="dl-item"><dt>Nature récupération</dt><dd>{{ incident.nature_recuperation|default:"—" }}</dd></div>
+    <div class="dl-item"><dt>Montant net perte</dt><dd>{{ incident.montant_net_perte|default:"—" }}</dd></div>
+    <div class="dl-item"><dt>Impact PCA</dt><dd>{{ incident.impact_pca|default:"—" }}</dd></div>
+    <div class="dl-item"><dt>Date butoire</dt><dd>{{ incident.date_butoire_resolution|default:"—" }}</dd></div>
+    <div class="dl-item" style="grid-column:1/-1"><dt>Commentaires</dt><dd class="pre">{{ incident.commentaires|default:"—" }}</dd></div>
+  </div>
+</div>
+
+<!-- Validation chef -->
+<div class="card" style="margin-bottom:14px; border-color:{% if incident.validation_chef == 'VALIDE' %}rgba(34,197,94,.35){% elif incident.validation_chef == 'REJETE' %}rgba(239,68,68,.35){% else %}var(--border){% endif %}">
+  <div class="section-title"><i class="bi bi-clipboard2-check" aria-label="Validation"></i> Validation chef de direction</div>
+  <div class="dl">
+    <div class="dl-item"><dt>Décision</dt><dd><span class="badge {{ incident.badge_validation }}">{{ incident.get_validation_chef_display }}</span></dd></div>
+    <div class="dl-item"><dt>Date décision</dt><dd>{{ incident.date_validation_chef|default:"—" }}</dd></div>
+    <div class="dl-item" style="grid-column:1/-1"><dt>Commentaire chef</dt><dd class="pre">{{ incident.commentaire_chef|default:"Aucun commentaire." }}</dd></div>
+  </div>
+</div>
+
+{% if mesures %}
+<div class="card" style="margin-bottom:14px">
+  <div class="section-title"><i class="bi bi-lightning-charge" aria-label="Mesures"></i> Mesures immédiates</div>
+  <div class="tablewrap">
+    <table class="table">
+      <thead><tr><th>#</th><th>Mesure</th><th>Responsable</th><th>Direction/Service</th><th>Date</th></tr></thead>
+      <tbody>
+        {% for m in mesures %}
+        <tr><td>{{ m.numero }}</td><td>{{ m.mesure|default:"—" }}</td><td>{{ m.responsable_mise_en_place|default:"—" }}</td><td>{{ m.direction_service_responsable|default:"—" }}</td><td>{{ m.date_mise_en_place|default:"—" }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endif %}
+
+{% if actions %}
+<div class="card" style="margin-bottom:14px">
+  <div class="section-title"><i class="bi bi-tools" aria-label="Actions"></i> Actions correctives</div>
+  <div class="tablewrap">
+    <table class="table">
+      <thead><tr><th>#</th><th>Action</th><th>Responsable</th><th>Statut</th><th>Délai</th></tr></thead>
+      <tbody>
+        {% for a in actions %}
+        <tr><td>{{ a.numero }}</td><td>{{ a.action|default:"—" }}</td><td>{{ a.responsable_mise_en_place|default:"—" }}</td><td>{{ a.statut_action|default:"—" }}</td><td>{{ a.delai_mise_en_place|default:"—" }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endif %}
+
+<!-- Avis direction des risques -->
+{% if profile.can_treat or profile.is_admin %}
+<div class="card" style="margin-bottom:14px">
+  <div class="section-title"><i class="bi bi-shield-check" aria-label="Avis des risques"></i> Avis Direction des Risques</div>
+  {% if avis_risques_op %}
+  <div class="dl" style="margin-bottom:14px">
+    <div class="dl-item"><dt>Agent traitement — Avis</dt><dd><span class="badge {% if avis_risques_op.ok_ko == 'OK' %}badge--success{% elif avis_risques_op.ok_ko == 'KO' %}badge--danger{% else %}badge--muted{% endif %}" title="Avis de l'agent de traitement">{{ avis_risques_op.ok_ko|default:"En attente" }}</span></dd></div>
+    <div class="dl-item"><dt>Date</dt><dd>{{ avis_risques_op.date|default:"—" }}</dd></div>
+    <div class="dl-item" style="grid-column:1/-1"><dt>Opinion</dt><dd class="pre">{{ avis_risques_op.opinion|default:"—" }}</dd></div>
+  </div>
+  {% endif %}
+  {% if avis_dir_risques %}
+  <div class="dl">
+    <div class="dl-item"><dt>Directeur Risques — Avis</dt><dd><span class="badge {% if avis_dir_risques.ok_ko == 'OK' %}badge--success{% elif avis_dir_risques.ok_ko == 'KO' %}badge--danger{% else %}badge--muted{% endif %}" title="Avis du directeur des risques">{{ avis_dir_risques.ok_ko|default:"En attente" }}</span></dd></div>
+    <div class="dl-item"><dt>Date</dt><dd>{{ avis_dir_risques.date|default:"—" }}</dd></div>
+    <div class="dl-item" style="grid-column:1/-1"><dt>Opinion</dt><dd class="pre">{{ avis_dir_risques.opinion|default:"—" }}</dd></div>
+  </div>
+  {% endif %}
+  {% if profile.can_treat %}
+  <div style="margin-top:14px">
+    <a class="btn btn--primary" href="{% url 'incidents:risques_avis' incident.pk %}" title="Saisir votre avis sur cet incident"><i class="bi bi-pen" aria-label="Avis"></i> Saisir mon avis</a>
+  </div>
+  {% endif %}
+</div>
+{% endif %}
+{% endblock %}

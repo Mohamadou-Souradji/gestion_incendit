@@ -1,0 +1,333 @@
+{
+  "xlsx_path": "c:\\Users\\abous\\Downloads\\remonté d'incident opérationnel-12.xlsx",
+  "sheet": "Fiche de remontée ",
+  "fields_from_validations": [
+    {
+      "sqref": "F39:H39",
+      "top_left": "F39",
+      "label_guess": "Catégorisation Baloises de Risques :",
+      "validation_type": "list",
+      "formula": "datavalidation!C2:C9",
+      "choices": [
+        "Sélectionner une catégorie …",
+        "1-       Fraude interne",
+        "2-       Fraude externe",
+        "3-       Pratiques sociales et sécurité sur le lieu de travail",
+        "4-       Clients Produits et Pratiques commerciales",
+        "5-       Dommages aux actifs matériels",
+        "6-       Interruption d'activité et défaillance de systèmes",
+        "7-       Exécution, Livraison et Gestion des Processus"
+      ]
+    },
+    {
+      "sqref": "F42:H42",
+      "top_left": "F42",
+      "label_guess": "Processus :",
+      "validation_type": "list",
+      "formula": "datavalidation!$B$2:$B$61",
+      "choices": [
+        "Sélectionner un processus …",
+        "1-1-Gérer  l'Audit interne",
+        "1-2-Gérer l'Audit informatique",
+        "2-1-Gérer la conformité",
+        "3-1-Gérer le contrôle permanent",
+        "4-1-Gérer la qualité",
+        "5-1-Gérer l'administration de la Direction générale",
+        "6-1-Gérer la clientèle institutionnelle",
+        "6-2-Gérer clientèle Réseau Agence",
+        "6-3-Gérer les PME/PMI",
+        "6-4-Gérer les Agences /Bureaux",
+        "7-1-Gérer l'analyse des crédits",
+        "7-2-Gérer l'administration de crédits",
+        "7-3-Gérer les engagements par signature",
+        "8-1-Gérer le marketing et la stratégie",
+        "8-2-Gérer le digital / moyen de paiements",
+        "9-1-Gérer le Juridique",
+        "9-2-Gérer le Recouvrement",
+        "10-1-Gérer les Opérations Locales",
+        "10-2-Gérer les Opérations avec l'Etranger",
+        "10-3-Gérer les transferts Rapides",
+        "11-1-Gérer le personnel et la formation",
+        "11-2-Gérer le Materiel et la Sécurité",
+        "12-1-Gérer la comptabilité et le reporting",
+        "12-2-Gérer le contrôle de gestion",
+        "12-3-Gérer la Trésorerie",
+        "13-1-Gérer l'exploitation et la production",
+        "13-2-Gérer l'Administration Réseaux, Télécom et Sécurité",
+        "13-3-Gérer la maintenance et le développement",
+        "14-1-Gérer le Partenariat",
+        "14-2-Gérer l'Etude et l'analyse crédit agricole",
+        "14-3-Gérer le suivi crédit agricole",
+        "14-4-Gérer l'Unité de gestion des projets",
+        "15-1-Gérer le risque opérationnel et stratégique",
+        "15-2-Gérer le risque de crédit"
+      ]
+    },
+    {
+      "sqref": "F40:H40",
+      "top_left": "F40",
+      "label_guess": "Sous catégories d'incidents :",
+      "validation_type": "list",
+      "formula": "datavalidation!$D$2:$D$70",
+      "choices": [
+        "Sélectionner une sous catégorie …",
+        "1-1-Vols par le personnel (incluant les prestataires de services, consultants, stagiaires et intérimaires)",
+        "1-2-Fraude sur des transactions par le personnel ou avec sa complicité",
+        "1-3-Utilisation non autorisée/à mauvais escient d'information privlivégiée et confidentielle par le personnel",
+        "2-1 Piratage informatique et autres attaques malveillantes des systèmes informatiques de la banque par des tiers",
+        "2-2-Autres formes d'actes criminels contre les actifs de la banque",
+        "2-3-Vols/escroqueries/fraudes commis par des tiers",
+        "3-1-Non respect de la loi bancaire",
+        "3-2-Non respect des lois contre la discrimination",
+        "3-3-Non respect de la réglementation du travail",
+        "3-4-Non respect des normes de sécurité et santé",
+        "3-5-Non respect du code de déontologie par les employés et les dirigeants (risque de réputation + atteinte à l'image de la banque)",
+        "4-1-Litige sur les activités de conseil et de financements structurés",
+        "4-2-Pratiques commerciales inappropriées",
+        "4-3-Inadéquation des produits proposés",
+        "4-4-Insuffisance du service au client",
+        "4-5-Contrats ou clauses contractuelles inapplicables",
+        "4-6-Autres litiges avec un tiers",
+        "5-1-Destruction ou dommages résultant d'une catastrophe naturelle ou d'autres sinistres",
+        "6-1-1-Défaillance de matériel(caméras, accès badgé..ect)",
+        "6-1-2-Données incohérentes issues du système",
+        "6-1-3-Mauvaise gestion de projet",
+        "6-1-4-1Défaillance de software",
+        "6-1-5-Faiblesse de la sécurité logique (accès aux systèmes,  création/modification/supression de comptes, profils et habilitations)",
+        "6-1-6-Faiblesse de la sécurité physique lié à l'informatique ( accès aux ordinateurs, accès à la salle serveur..ect)",
+        "6-2-1-Défaut de personnel ( indisponibilité de ressources humaines résultant de circonstances diverses)",
+        "6-2-2-Pertes de données (détérioration, destruction ou indisponibilité des données de référence ou de transaction en format physique ou électronique)",
+        "6-2-3-Pertes de services (interruption de la capacité d'exploitation provenant de l'indisponibilité de services vitaux pour l'exploitation normale de l'activité telle que la défaillance d'un prestataire de service).",
+        "7-1-1-Défaillance dans le processus de livraison et/ou de règlement de la banque",
+        "7-1-2-Défaillance dans les processus de gestion des confirmations d'opérations",
+        "7-1-5-Absence ou inexactitude des données nécessaires à la gestion des activités",
+        "7-1-6-Absence ou inexactitude des rapports d'erreur/de contrôle dans les chaines informatiques",
+        "7-1-7-Défaillance dans la conservation pour compte de tiers de documents/valeurs",
+        "7-1-8-Défaillances sur services rendus par des sous-traitants",
+        "7-2-1-Défaillance dans le dispositif de gestion et de suivi des autorisations et des limites",
+        "7-2-2-Evaluation incorrecte ou inexistante de la position",
+        "7-2-3-Données de marché et informations publiques fausses ou insuffisantes",
+        "7-2-4-Modèle de calcul de prix ou valorisation erroné",
+        "7-3-1-Non respect de la loi bancaire",
+        "7-3-2-Non respect des lois sur l'environnement",
+        "7-3-3-Non respect des règles de fonctionnement des marchés organisés",
+        "7-3-4-Non respect des exigences réglementaires locales",
+        "7-3-5-Non respect des exigences comptables ou de la communication financière",
+        "7-3-6- Non respect de la législation fiscale",
+        "7-3-7-Blanchiement d'argent et financement du terrorisme",
+        "7-3-8-Non respect de toute autre loi ou réglement applicable à la banque ( nationales, régionales et internationales)",
+        "7-4-1-Non respect ou le contournement délibéré des règles de procédures internes ou externes par les traders dans le cadre de leur intervention  sur les marchés financiers.",
+        "7-5-1-Changement organisationnel (modification de l'orgranigramme, réaffectation de ressources inadéquates)",
+        "7-5-2-Changement des processus (séquence des étapes clés, control owner inadéquats)",
+        "7-5-3-Non respect des dispositions prévues par les politiques, les manuels de procédures du Groupe et les notes internes",
+        "7-5-4-Non mise à jour des procédures existantes (pratiques différentes des dispositions prévues par le manuel et ayant engendré des risques)",
+        "7-5-5-Activités ou produits non encadrés par des procédures",
+        "7-5-6-Procédures opérationnelles non adaptées à l'organisation ou à son environnement",
+        "7-5-7-Contrôle de 1er niveau inexistant",
+        "7-5-8- Contrôle de 1er niveau non formalisé",
+        "7-5-9-Contrôle de 1er niveau inadapté",
+        "7-5-10-Contrôle de 2nd niveau inexistant",
+        "7-5-11-Contrôle de 2nd niveau inadapté",
+        "7-5-12-Contrôle de 2nd niveau non formalisé",
+        "7-5-13Outils ou applications informatiques non adaptés aux besoins des utilisateurs",
+        "7-5-13- OUtils ou applications informatiques inexistants",
+        "7-5-14-Mise à jour/maintenance des applications informatiques non réalisée",
+        "7-5-15-Périodicité inadaptée des contrôles de 1er ou 2nd niveaux",
+        "7-5-16-Défauts de rapprochement et de justification des comptes (proofing et analyse des comptes)",
+        "7-5-17-Rapprochements réalisés manuellement (risque d'erreur ou d'omission)",
+        "7-5-18-Opérations diverses comptabilisées et non justifiées/non validées par deux personnes distinctes",
+        "7-5-19-Nombre de ressources insuffisant par rapport au niveau d'activité du département ou de la direction (niveau d'activité élevé entrainant des risques opérationnels)",
+        "7-5-20-Dispositif de contrôle de la sécurité physique défaillant (accès aux parking, bureaux,  locaux, agences..ect)"
+      ]
+    },
+    {
+      "sqref": "F41:H41",
+      "top_left": "F41",
+      "label_guess": "Macro Processus :",
+      "validation_type": "list",
+      "formula": "datavalidation!$A$2:$A$61",
+      "choices": [
+        "Sélectionner un macro processus …",
+        "1-Gérer  l'Audit et l'Inspection des services",
+        "2-Gérer la Conformité",
+        "3-Gérer le contrôle permanent",
+        "4-Gérer la qualité",
+        "5-Gérer l'administration de la Direction générale",
+        "6-Gérer le Commercial",
+        "7-Gérer les Engagements",
+        "8-Gérer la banque digitale et la stratégie",
+        "9-Gérer le Juridique et le Recouvrement",
+        "10-Gérer les Opérations",
+        "11-Gérer l'Administration & RH, materiel",
+        "12-Gérer la Comptabilité et la Finance",
+        "13-Gérer le système d'information",
+        "14-Gérer le financement du secteur agricole",
+        "15-Gérer le risque"
+      ]
+    },
+    {
+      "sqref": "F79:I79",
+      "top_left": "F79",
+      "label_guess": "Impact sur le PCA",
+      "validation_type": "list",
+      "formula": "datavalidation!$G$2:$G$4",
+      "choices": [
+        "Sélectionner…",
+        "OUI",
+        "NON"
+      ]
+    },
+    {
+      "sqref": "F18:H18",
+      "top_left": "F18",
+      "label_guess": "Direction le cas Echéant :",
+      "validation_type": "list",
+      "formula": "datavalidation!$L$1:$L$14",
+      "choices": [
+        "Direction",
+        "Sélectionner une direction…",
+        "Direction Risques",
+        "Direction Audit et Inspection des services",
+        "Service de  Conformité",
+        "Direction  Commerciale",
+        "Direction des engagements",
+        "Direction Financement du secteur agricole",
+        "Département Juridique, Recouvrement et Contentieux",
+        "Département des Opérations",
+        "Direction Ressources Humaines et materiels",
+        "Direction de la Comptabilité et Finance",
+        "Direction du système d'information",
+        "Direction banque digitale et stratégies"
+      ]
+    },
+    {
+      "sqref": "F44:H45",
+      "top_left": "F44",
+      "label_guess": "Incident SI :",
+      "validation_type": "list",
+      "formula": "datavalidation!$G$2:$G$5",
+      "choices": [
+        "Sélectionner…",
+        "OUI",
+        "NON"
+      ]
+    },
+    {
+      "sqref": "F50:H50",
+      "top_left": "F50",
+      "label_guess": "Comptabilisation de la perte",
+      "validation_type": "list",
+      "formula": "datavalidation!$G$2:$G$5",
+      "choices": [
+        "Sélectionner…",
+        "OUI",
+        "NON"
+      ]
+    },
+    {
+      "sqref": "F38:H38",
+      "top_left": "F38",
+      "label_guess": "Incident lié au risque de crédit :",
+      "validation_type": "list",
+      "formula": "datavalidation!$G$2:$G$5",
+      "choices": [
+        "Sélectionner…",
+        "OUI",
+        "NON"
+      ]
+    },
+    {
+      "sqref": "F43:H43",
+      "top_left": "F43",
+      "label_guess": "Domaine d'activité :",
+      "validation_type": "list",
+      "formula": "datavalidation!$F$2:$F$10",
+      "choices": [
+        "Sélectionner l'activité …",
+        "Risques",
+        "Audit",
+        "Conformité et Contrôle Permanent",
+        "Développement des Affaires",
+        "Opérations bancaires"
+      ]
+    },
+    {
+      "sqref": "F48:H48",
+      "top_left": "F48",
+      "label_guess": "Perte",
+      "validation_type": "list",
+      "formula": "datavalidation!$K$2:$K$5",
+      "choices": [
+        "Sélectionner le type de perte…",
+        "Avérée",
+        "Potentielle",
+        "incident Sans perte"
+      ]
+    },
+    {
+      "sqref": "J12",
+      "top_left": "J12",
+      "label_guess": "Version",
+      "validation_type": "list",
+      "formula": "datavalidation!$J$2:$J$4",
+      "choices": [
+        "Sélectionner une version…",
+        "V0",
+        "V1"
+      ]
+    },
+    {
+      "sqref": "F80:I80",
+      "top_left": "F80",
+      "label_guess": "Statut de l'incident",
+      "validation_type": "list",
+      "formula": "datavalidation!$I$2:$I$5",
+      "choices": [
+        "Sélectionner un statut…",
+        "Clos",
+        "En cours de résolution",
+        "Non résolu"
+      ]
+    },
+    {
+      "sqref": "K72:K74",
+      "top_left": "K72",
+      "label_guess": "1",
+      "validation_type": "list",
+      "formula": "datavalidation!$I$2:$I$5",
+      "choices": [
+        "Sélectionner un statut…",
+        "Clos",
+        "En cours de résolution",
+        "Non résolu"
+      ]
+    },
+    {
+      "sqref": "F78:I78",
+      "top_left": "F78",
+      "label_guess": "Criticité de l'incident",
+      "validation_type": "list",
+      "formula": "datavalidation!$H$2:$H$6",
+      "choices": [
+        "Sélectionner une criticité…",
+        "Faible",
+        "Moyen",
+        "Fort",
+        "Majeur"
+      ]
+    },
+    {
+      "sqref": "F54:H54",
+      "top_left": "F54",
+      "label_guess": "Nature de la récupération:",
+      "validation_type": "list",
+      "formula": "datavalidation!$E$2:$E$5",
+      "choices": [
+        "Sélectionner  …",
+        "Assurance",
+        "Remboursement",
+        "Autre (à préciser)"
+      ]
+    }
+  ]
+}

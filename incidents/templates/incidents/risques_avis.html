@@ -1,0 +1,39 @@
+{% extends "incidents/base.html" %}
+{% block title %}Avis Directeur — Incident #{{ incident.pk }} | BAGRI{% endblock %}
+
+{% block content %}
+<div class="pagehead">
+  <div>
+    <h1><i class="bi bi-shield-check" aria-label="Avis"></i> Avis Directeur — Incident <span style="color:var(--primary)">#{{ incident.pk }}</span></h1>
+    <p class="muted">Enregistrez votre analyse et votre décision de traitement.</p>
+  </div>
+  <a class="btn" href="{% url 'incidents:risques' %}" title="Retourner au tableau de bord"><i class="bi bi-arrow-left" aria-label="Retour"></i> Tableau de bord</a>
+</div>
+
+<div class="card" style="margin-bottom:14px">
+  <div class="section-title"><i class="bi bi-info-circle" aria-label="Information"></i> Résumé</div>
+  <div class="dl">
+    <div class="dl-item"><dt>Direction</dt><dd>{{ incident.direction|default:"—" }}</dd></div>
+    <div class="dl-item"><dt>Date déclaration</dt><dd>{{ incident.date_declaration|default:"—" }}</dd></div>
+    <div class="dl-item"><dt>Criticité</dt><dd>{{ incident.criticite|default:"—" }}</dd></div>
+    <div class="dl-item"><dt>Statut</dt><dd>{{ incident.statut_incident|default:"—" }}</dd></div>
+    <div class="dl-item" style="grid-column:1/-1"><dt>Description</dt><dd class="pre">{{ incident.description|default:"—" }}</dd></div>
+  </div>
+</div>
+
+<div class="card form">
+  <div class="section-title"><i class="bi bi-pen" aria-label="Décision"></i> Avis Directeur de la Gestion des Risques</div>
+  <form method="post">
+    {% csrf_token %}
+    <div class="grid-2">
+      <div class="field"><label>Avis (OK / KO) *</label>{{ form.ok_ko }}</div>
+      <div class="field"><label>Date d'avis</label>{{ form.date }}</div>
+      <div class="field field--full"><label>Opinion / Analyse</label>{{ form.opinion }}</div>
+    </div>
+    <div class="actions">
+      <a class="btn" href="{% url 'incidents:risques' %}" title="Annuler">Annuler</a>
+      <button class="btn btn--primary btn--lg" type="submit" title="Enregistrer votre avis"><i class="bi bi-check-lg" aria-label="Enregistrer"></i> Enregistrer l'avis</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

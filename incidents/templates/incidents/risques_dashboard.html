@@ -1,0 +1,81 @@
+{% extends "incidents/base.html" %}
+{% block title %}Tableau de bord Risques | BAGRI{% endblock %}
+
+{% block content %}
+<div class="pagehead">
+  <div>
+    <h1><i class="bi bi-speedometer2" aria-label="Tableau de bord"></i> Tableau de bord — Direction des Risques</h1>
+    <p class="muted">Incidents validés par les chefs de direction, à affecter et traiter.</p>
+  </div>
+  <div class="pagehead__actions">
+    <a class="btn" href="{% url 'incidents:export_csv' %}" title="Télécharger les données en CSV"><i class="bi bi-filetype-csv" aria-label="Exporter"></i> Exporter</a>
+  </div>
+</div>
+
+{% with total=incidents|length %}
+<div class="stats-grid">
+  <div class="stat-card stat-card--green">
+    <div class="stat-card__value">{{ total }}</div>
+    <div class="stat-card__label"><i class="bi bi-check-circle" aria-label="Validés"></i> Incidents validés reçus</div>
+  </div>
+  <div class="stat-card stat-card--blue">
+    <div class="stat-card__value">{% for i in incidents %}{% if not i.agent_affecte %}{% with x=forloop.counter %}{% endwith %}{% endif %}{% endfor %}—</div>
+    <div class="stat-card__label"><i class="bi bi-person-dash" aria-label="Non assignés"></i> Non affectés</div>
+  </div>
+  <div class="stat-card stat-card--orange">
+    <div class="stat-card__value">{{ total }}</div>
+    <div class="stat-card__label"><i class="bi bi-bar-chart" aria-label="Chart"></i> Total reçus</div>
+  </div>
+  <div class="stat-card stat-card--red">
+    <div class="stat-card__value">{{ total }}</div>
+    <div class="stat-card__label"><i class="bi bi-calendar3" aria-label="Dates"></i> Ce mois</div>
+  </div>
+</div>
+{% endwith %}
+
+<div class="card" style="padding:0;overflow:hidden">
+  {% if incidents %}
+  <div class="tablewrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>#</th><th>Date</th><th>Direction</th><th>Description</th>
+          <th>Criticité</th><th>Avis Directeur</th><th>Agent affecté</th><th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for it in incidents %}
+        {% with avis=it.avis_validations.all %}
+        <tr>
+          <td><strong style="color:var(--primary)">#{{ it.pk }}</strong></td>
+          <td>{{ it.date_declaration|default:"—" }}</td>
+          <td>{{ it.direction|default:"—"|truncatechars:20 }}</td>
+          <td>{{ it.description|default:it.processus|default:"—"|truncatechars:35 }}</td>
+          <td>{% if it.criticite %}<span class="badge {% if 'ÉLEVÉE' in it.criticite or 'HAUTE' in it.criticite %}badge--danger{% elif 'MOYENNE' in it.criticite %}badge--warning{% else %}badge--info{% endif %}">{{ it.criticite }}</span>{% else %}—{% endif %}</td>
+          <td>{% for av in avis %}{% if av.role == "DIR_GESTION_RISQUES" %}<span class="badge {% if av.ok_ko == 'OK' %}badge--success{% elif av.ok_ko == 'KO' %}badge--danger{% else %}badge--muted{% endif %}">{{ av.ok_ko|default:"En attente" }}</span>{% endif %}{% endfor %}</td>
+          <td>
+            {% if it.agent_affecte %}<span class="badge badge--success" title="Agent affecté"><i class="bi bi-person-check" aria-label="Affecté"></i> {{ it.agent_affecte.username }}</span>
+            {% else %}<span class="badge badge--muted" title="Non affecté"><i class="bi bi-person-dash" aria-label="Non assigné"></i> Non affecté</span>{% endif %}
+          </td>
+          <td class="ta-right" style="white-space:nowrap">
+            {% if profile.is_dir_risques or profile.is_admin %}
+              <a class="btn btn--sm btn--primary" href="{% url 'incidents:affecter' it.pk %}" title="Assigner un agent"><i class="bi bi-person-plus" aria-label="Affecter"></i> Affecter</a>
+              <a class="btn btn--sm" href="{% url 'incidents:risques_avis' it.pk %}" title="Saisir votre avis"><i class="bi bi-pen" aria-label="Avis"></i> Avis</a>
+            {% endif %}
+            <a class="btn btn--sm" href="{% url 'incidents:detail' it.pk %}" title="Voir les détails"><i class="bi bi-eye" aria-label="Voir"></i></a>
+          </td>
+        </tr>
+        {% endwith %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+    <div class="empty-state">
+      <i class="bi bi-check2-all" style="font-size:48px;color:var(--muted);display:block;margin-bottom:12px;" aria-label="Fini"></i>
+      <h3>Aucun incident à traiter</h3>
+      <p>Les incidents validés par les chefs de direction apparaîtront ici.</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

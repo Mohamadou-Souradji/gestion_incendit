@@ -1,0 +1,50 @@
+{% extends "incidents/base.html" %}
+{% block title %}Validation — Incident #{{ incident.pk }} | BAGRI{% endblock %}
+
+{% block content %}
+<div class="pagehead">
+  <div>
+    <h1><i class="bi bi-clipboard2-check" aria-label="Validation"></i> Validation — Incident <span style="color:var(--primary)">#{{ incident.pk }}</span></h1>
+    <p class="muted">Examinez la déclaration et transmettez votre décision.</p>
+  </div>
+  <a class="btn" href="{% url 'incidents:list' %}" title="Retourner à la liste"><i class="bi bi-arrow-left" aria-label="Retour"></i> Retour</a>
+</div>
+
+<div class="card" style="margin-bottom:14px">
+  <div class="section-title"><i class="bi bi-file-text" aria-label="Résumé"></i> Résumé de l'incident</div>
+  <div class="dl">
+    <div class="dl-item"><dt>Déclarant</dt><dd>{{ incident.nom_prenom_declarant|default:"—" }}{% if incident.declarant %} ({{ incident.declarant.username }}){% endif %}</dd></div>
+    <div class="dl-item"><dt>Date déclaration</dt><dd>{{ incident.date_declaration|default:"—" }}</dd></div>
+    <div class="dl-item"><dt>Direction</dt><dd>{{ incident.direction|default:"—" }}</dd></div>
+    <div class="dl-item"><dt>Criticité</dt><dd>{% if incident.criticite %}<span class="badge badge--warning">{{ incident.criticite }}</span>{% else %}—{% endif %}</dd></div>
+    <div class="dl-item"><dt>Montant estimé perte</dt><dd>{{ incident.montant_estime_perte|default:"—" }}</dd></div>
+    <div class="dl-item"><dt>Statut</dt><dd>{{ incident.statut_incident|default:"—" }}</dd></div>
+    <div class="dl-item" style="grid-column:1/-1"><dt>Description</dt><dd class="pre">{{ incident.description|default:"—" }}</dd></div>
+  </div>
+  <div style="margin-top:12px">
+    <a class="btn btn--sm" href="{% url 'incidents:detail' incident.pk %}" title="Voir le dossier complet"><i class="bi bi-eye" aria-label="Voir"></i> Voir le dossier complet</a>
+  </div>
+</div>
+
+<div class="card form">
+  <div class="section-title"><i class="bi bi-pen" aria-label="Décision"></i> Votre décision</div>
+  <form method="post">
+    {% csrf_token %}
+    <div class="grid-2">
+      <div class="field">
+        <label>Décision *</label>{{ form.validation_chef }}
+      </div>
+      <div class="field">
+        <label>Date de décision</label>{{ form.date_validation_chef }}
+      </div>
+      <div class="field field--full">
+        <label>Commentaire / Motif (obligatoire si rejet)</label>{{ form.commentaire_chef }}
+      </div>
+    </div>
+    <div class="actions">
+      <a class="btn" href="{% url 'incidents:list' %}" title="Annuler">Annuler</a>
+      <button class="btn btn--warning btn--lg" type="submit" title="Enregistrer votre décision"><i class="bi bi-send-check" aria-label="Enregistrer"></i> Enregistrer la décision</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "incidents/base.html" %}
+{% block title %}Affecter un agent — Incident #{{ incident.pk }} | BAGRI{% endblock %}
+
+{% block content %}
+<div class="pagehead">
+  <div>
+    <h1><i class="bi bi-person-plus-fill" aria-label="Affectation"></i> Affecter un agent — Incident <span style="color:var(--primary)">#{{ incident.pk }}</span></h1>
+    <p class="muted">Désignez l'agent de traitement responsable de cet incident.</p>
+  </div>
+  <a class="btn" href="{% url 'incidents:detail' incident.pk %}" title="Retourner au détail"><i class="bi bi-arrow-left" aria-label="Retour"></i> Retour</a>
+</div>
+
+<div class="card" style="margin-bottom:14px">
+  <div class="section-title"><i class="bi bi-info-circle" aria-label="Information"></i> Résumé de l'incident</div>
+  <div class="dl">
+    <div class="dl-item"><dt>Direction</dt><dd>{{ incident.direction|default:"—" }}</dd></div>
+    <div class="dl-item"><dt>Date déclaration</dt><dd>{{ incident.date_declaration|default:"—" }}</dd></div>
+    <div class="dl-item"><dt>Criticité</dt><dd>{{ incident.criticite|default:"—" }}</dd></div>
+    <div class="dl-item"><dt>Agent actuel</dt><dd>
+      {% if incident.agent_affecte %}<span class="badge badge--success" title="Agent actuellement affecté"><i class="bi bi-person-check" aria-label="Affecté"></i> {{ incident.agent_affecte.get_full_name|default:incident.agent_affecte.username }}</span>
+      {% else %}<span class="badge badge--muted" title="Aucun agent affecté">Non affecté</span>{% endif %}
+    </dd></div>
+  </div>
+</div>
+
+<div class="card form" style="max-width:500px">
+  <div class="section-title"><i class="bi bi-person-plus" aria-label="Sélection"></i> Choisir l'agent</div>
+  <form method="post">
+    {% csrf_token %}
+    <div class="field" style="margin-bottom:20px">
+      <label>Agent de traitement *</label>
+      {{ form.agent_affecte }}
+    </div>
+    <div class="actions">
+      <a class="btn" href="{% url 'incidents:detail' incident.pk %}">Annuler</a>
+      <button class="btn btn--primary btn--lg" type="submit" title="Confirmer l'affectation"><i class="bi bi-check-lg" aria-label="Confirmer"></i> Confirmer l'affectation</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

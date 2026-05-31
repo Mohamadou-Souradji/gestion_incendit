@@ -1,0 +1,144 @@
+{% extends "incidents/base.html" %}
+{% block title %}
+  {% if profile.is_chef %}À valider{% elif profile.is_risques_op %}Mes affectations{% elif profile.can_treat %}Incidents{% else %}Mes incidents{% endif %} | BAGRI
+{% endblock %}
+
+{% block content %}
+<div class="pagehead">
+  <div>
+    <h1>
+      <i class="bi bi-{% if profile.is_chef %}check2-square{% elif profile.is_risques_op %}inbox{% else %}list-ul{% endif %}" aria-label="{% if profile.is_chef %}Validation{% elif profile.is_risques_op %}Affectations{% else %}Liste{% endif %}"></i>
+      {% if profile.is_chef %}Incidents à valider — {{ profile.direction }}
+      {% elif profile.is_risques_op %}Incidents qui me sont affectés
+      {% elif profile.is_dir_risques or profile.is_admin %}Tous les incidents
+      {% else %}Mes déclarations{% endif %}
+    </h1>
+    <p class="muted">
+      {% if profile.is_declarant %}Vos incidents déclarés. Seuls vos incidents sont visibles.
+      {% elif profile.is_chef %}Les incidents de votre direction en attente ou traités.
+      {% elif profile.is_risques_op %}Uniquement les incidents qui vous ont été affectés par la direction des risques.
+      {% elif profile.can_treat %}Vue globale — tous les incidents validés et non validés.{% endif %}
+    </p>
+  </div>
+  <div class="pagehead__actions">
+    {% if profile.is_declarant or profile.is_admin %}
+      <a class="btn" href="{% url 'incidents:export_csv' %}" title="Télécharger au format CSV"><i class="bi bi-filetype-csv" aria-label="CSV"></i> CSV</a>
+      <a class="btn" href="{% url 'incidents:export_xlsx' %}" title="Télécharger au format Excel"><i class="bi bi-file-earmark-excel" aria-label="Excel"></i> Excel</a>
+      <a class="btn" href="{% url 'incidents:import' %}" title="Charger des incidents depuis un fichier"><i class="bi bi-upload" aria-label="Importer"></i> Importer</a>
+      <a class="btn btn--primary" href="{% url 'incidents:create' %}" title="Créer un nouvel incident"><i class="bi bi-plus-lg" aria-label="Ajouter"></i> Nouveau incident</a>
+    {% endif %}
+    {% if profile.is_dir_risques or profile.is_admin %}
+      <a class="btn" href="{% url 'incidents:export_csv' %}" title="Télécharger tous les incidents en CSV"><i class="bi bi-filetype-csv" aria-label="Exporter"></i> Exporter</a>
+    {% endif %}
+  </div>
+</div>
+
+<!-- Filtres -->
+<form method="get" class="card" style="margin-bottom:14px; padding:16px;">
+  <div class="filters-bar">
+    <div class="field">
+      <label>Criticité</label>
+      <input type="text" name="criticite" value="{{ filter_criticite }}" placeholder="Ex : ÉLEVÉE"/>
+    </div>
+    <div class="field">
+      <label>Statut</label>
+      <input type="text" name="statut" value="{{ filter_statut }}" placeholder="Ex : OUVERT"/>
+    </div>
+    {% if not profile.is_declarant %}
+    <div class="field">
+      <label>Direction</label>
+      <input type="text" name="direction" value="{{ filter_direction }}" placeholder="Direction…"/>
+    </div>
+    {% endif %}
+    <div class="field">
+      <label>Du</label>
+      <input type="date" name="date_from" value="{{ filter_date_from }}"/>
+    </div>
+    <div class="field">
+      <label>Au</label>
+      <input type="date" name="date_to" value="{{ filter_date_to }}"/>
+    </div>
+    <div style="display:flex;gap:8px;align-items:flex-end;padding-bottom:1px">
+      <button class="btn btn--primary" type="submit" title="Appliquer les filtres"><i class="bi bi-funnel-fill" aria-label="Filtrer"></i> Filtrer</button>
+      <a class="btn" href="{% url 'incidents:list' %}" title="Réinitialiser les filtres"><i class="bi bi-x-lg" aria-label="Réinitialiser"></i></a>
+    </div>
+  </div>
+</form>
+
+<div class="card" style="padding:0;overflow:hidden;">
+  {% if incidents %}
+    <div class="tablewrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Date</th>
+            <th>Direction</th>
+            <th>Description</th>
+            <th>Criticité</th>
+            <th>Validation chef</th>
+            {% if profile.is_dir_risques or profile.is_admin %}<th>Agent affecté</th>{% endif %}
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for it in incidents %}
+          <tr>
+            <td><strong style="color:var(--primary)">#{{ it.pk }}</strong></td>
+            <td>{{ it.date_declaration|default:"—" }}</td>
+            <td>{{ it.direction|default:"—"|truncatechars:20 }}</td>
+            <td>{{ it.description|default:it.processus|default:it.macro_processus|default:"—"|truncatechars:40 }}</td>
+            <td>
+              {% if it.criticite %}
+                <span class="badge {% if 'ÉLEVÉE' in it.criticite or 'HAUTE' in it.criticite or 'CRIT' in it.criticite %}badge--danger{% elif 'MOYENNE' in it.criticite %}badge--warning{% else %}badge--info{% endif %}">{{ it.criticite }}</span>
+              {% else %}<span class="badge badge--muted">N/A</span>{% endif %}
+            </td>
+            <td><span class="badge {{ it.badge_validation }}">{{ it.get_validation_chef_display }}</span></td>
+            {% if profile.is_dir_risques or profile.is_admin %}
+              <td>
+                {% if it.agent_affecte %}
+                  <span class="badge badge--success" title="Agent affecté"><i class="bi bi-person-check" aria-label="Affecté"></i> {{ it.agent_affecte.username }}</span>
+                {% else %}
+                  <span class="badge badge--muted" title="Pas d'agent affecté"><i class="bi bi-person-dash" aria-label="Non affecté"></i> Non affecté</span>
+                {% endif %}
+              </td>
+            {% endif %}
+            <td class="ta-right" style="white-space:nowrap">
+              {% if profile.is_declarant and it.declarant == request.user and it.validation_chef == "EN_ATTENTE" %}
+                <a class="btn btn--sm btn--primary" href="{% url 'incidents:edit' it.pk %}" title="Modifier cet incident"><i class="bi bi-pencil" aria-label="Modifier"></i> Modifier</a>
+              {% endif %}
+              {% if profile.is_admin %}
+                <a class="btn btn--sm btn--primary" href="{% url 'incidents:edit' it.pk %}" title="Modifier cet incident"><i class="bi bi-pencil" aria-label="Modifier"></i> Modifier</a>
+              {% endif %}
+              {% if profile.is_chef and it.validation_chef == "EN_ATTENTE" %}
+                <a class="btn btn--sm btn--warning" href="{% url 'incidents:chef_validate' it.pk %}" title="Valider cet incident"><i class="bi bi-pen" aria-label="Valider"></i> Valider</a>
+              {% endif %}
+              {% if profile.is_dir_risques or profile.is_admin %}
+                {% if it.validation_chef == "VALIDE" %}
+                  <a class="btn btn--sm btn--primary" href="{% url 'incidents:affecter' it.pk %}" title="Assigner un agent de traitement"><i class="bi bi-person-plus" aria-label="Affecter"></i> Affecter</a>
+                {% endif %}
+              {% endif %}
+              <a class="btn btn--sm" href="{% url 'incidents:detail' it.pk %}" title="Voir les détails complets"><i class="bi bi-eye" aria-label="Voir"></i> Voir</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="empty-state">
+      <i class="bi bi-inbox" style="font-size:48px;color:var(--muted);display:block;margin-bottom:12px;" aria-label="Aucun incident"></i>
+      <h3>Aucun incident</h3>
+      <p>
+        {% if profile.is_declarant %}Vous n'avez pas encore déclaré d'incident.
+        {% elif profile.is_chef %}Aucun incident en attente pour votre direction.
+        {% elif profile.is_risques_op %}Aucun incident ne vous a encore été affecté.
+        {% else %}Aucun incident trouvé.{% endif %}
+      </p>
+      {% if profile.is_declarant %}
+        <a class="btn btn--primary" href="{% url 'incidents:create' %}"><i class="bi bi-plus-lg"></i> Déclarer un incident</a>
+      {% endif %}
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

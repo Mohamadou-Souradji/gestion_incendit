@@ -1,0 +1,60 @@
+{% extends "incidents/base.html" %}
+{% block title %}{% if mode == "create" %}Nouvel utilisateur{% else %}Modifier {{ target.username }}{% endif %} | BAGRI{% endblock %}
+{% block content %}
+<div class="pagehead">
+  <div>
+    <h1><i class="bi bi-person-{% if mode == 'create' %}plus{% else %}gear{% endif %}" aria-label="{% if mode == 'create' %}Créer{% else %}Modifier{% endif %}"></i>
+      {% if mode == "create" %}Créer un utilisateur{% else %}Modifier — {{ target.username }}{% endif %}
+    </h1>
+    <p class="muted">{% if mode == "create" %}Définissez le rôle et la direction. La direction est obligatoire pour Déclarant et Chef.{% endif %}</p>
+  </div>
+  <a class="btn" href="{% url 'accounts:user_list' %}" title="Retourner à la liste des utilisateurs"><i class="bi bi-arrow-left" aria-label="Retour"></i> Retour</a>
+</div>
+<div class="card form" style="max-width:700px">
+  <form method="post">
+    {% csrf_token %}
+    {% if form.non_field_errors %}<div class="alert alert--danger">{{ form.non_field_errors }}</div>{% endif %}
+    {% if mode == "create" %}
+      <h2><i class="bi bi-person-badge" aria-label="Compte"></i> Compte</h2>
+      <div class="grid-2">
+        <div class="field"><label>Nom d'utilisateur *</label>{{ form.username }}{% if form.username.errors %}<small style="color:#fca5a5">{{ form.username.errors }}</small>{% endif %}</div>
+        <div class="field"><label>Mot de passe *</label>{{ form.password }}</div>
+        <div class="field"><label>Prénom</label>{{ form.first_name }}</div>
+        <div class="field"><label>Nom</label>{{ form.last_name }}</div>
+        <div class="field field--full"><label>Email</label>{{ form.email }}</div>
+      </div>
+    {% endif %}
+    <h2><i class="bi bi-shield-lock" aria-label="Sécurité"></i> Profil & Accès</h2>
+    <div class="grid-2">
+      <div class="field">
+        <label>Rôle *</label>{{ form.role }}
+        {% if form.role.errors %}<small style="color:#fca5a5">{{ form.role.errors }}</small>{% endif %}
+      </div>
+      <div class="field">
+        <label>Direction <span id="dir-required" style="color:#fca5a5;display:none">*</span></label>
+        {{ form.direction }}
+        {% if form.direction.errors %}<small style="color:#fca5a5">{{ form.direction.errors }}</small>{% endif %}
+        <small style="color:var(--muted)" id="dir-hint">Obligatoire pour Déclarant et Chef de direction.</small>
+      </div>
+      <div class="field field--full"><label>Téléphone</label>{{ form.telephone }}</div>
+    </div>
+    <div class="actions">
+      <a class="btn" href="{% url 'accounts:user_list' %}" title="Annuler">Annuler</a>
+      <button class="btn btn--primary btn--lg" type="submit" title="{% if mode == 'create' %}Créer le compte{% else %}Enregistrer les modifications{% endif %}">
+        <i class="bi bi-check-lg" aria-label="{% if mode == 'create' %}Créer{% else %}Enregistrer{% endif %}"></i>
+        {% if mode == "create" %}Créer l'utilisateur{% else %}Enregistrer{% endif %}
+      </button>
+    </div>
+  </form>
+</div>
+<script>
+// Affiche/cache la mention obligatoire selon le rôle choisi
+const roleSelect = document.querySelector('[name="role"]');
+const dirRequired = document.getElementById('dir-required');
+function updateDirHint() {
+  const v = roleSelect ? roleSelect.value : '';
+  if (dirRequired) dirRequired.style.display = (v === 'DECLARANT' || v === 'CHEF') ? 'inline' : 'none';
+}
+if (roleSelect) { roleSelect.addEventListener('change', updateDirHint); updateDirHint(); }
+</script>
+{% endblock %}

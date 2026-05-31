@@ -1,0 +1,49 @@
+{% extends "incidents/base.html" %}
+{% block title %}Gestion des utilisateurs | BAGRI{% endblock %}
+{% block content %}
+<div class="pagehead">
+  <div>
+    <h1><i class="bi bi-people" aria-label="Utilisateurs"></i> Gestion des utilisateurs</h1>
+    <p class="muted">Créez et gérez les comptes par direction.</p>
+  </div>
+  <a class="btn btn--primary" href="{% url 'accounts:user_create' %}" title="Créer un nouveau compte utilisateur"><i class="bi bi-person-plus" aria-label="Ajouter"></i> Nouvel utilisateur</a>
+</div>
+<div class="card" style="padding:0;overflow:hidden">
+  {% if users %}
+  <div class="tablewrap">
+    <table class="table">
+      <thead>
+        <tr><th>Utilisateur</th><th>Nom complet</th><th>Rôle</th><th>Direction</th><th>Téléphone</th><th>Statut</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for u in users %}
+        <tr>
+          <td><strong>{{ u.username }}</strong></td>
+          <td>{{ u.get_full_name|default:"—" }}</td>
+          <td>
+            <span class="badge {% if u.profile.is_admin %}badge--danger{% elif u.profile.is_dir_risques %}badge--warning{% elif u.profile.is_chef %}badge--info{% elif u.profile.is_risques_op %}badge--success{% else %}badge--muted{% endif %}">
+              {{ u.profile.get_role_display }}
+            </span>
+          </td>
+          <td>{{ u.profile.direction|default:"—" }}</td>
+          <td>{{ u.profile.telephone|default:"—" }}</td>
+          <td>{% if u.is_active %}<span class="badge badge--success" title="Utilisateur actif"><i class="bi bi-check-circle" aria-label="Actif"></i> Actif</span>{% else %}<span class="badge badge--muted" title="Utilisateur inactif">Inactif</span>{% endif %}</td>
+          <td class="ta-right" style="white-space:nowrap">
+            <a class="btn btn--sm" href="{% url 'accounts:user_edit' u.pk %}" title="Modifier cet utilisateur"><i class="bi bi-pencil" aria-label="Modifier"></i> Modifier</a>
+            {% if u != request.user %}
+              <a class="btn btn--sm btn--danger" href="{% url 'accounts:user_delete' u.pk %}" title="Supprimer ce compte"><i class="bi bi-trash" aria-label="Supprimer"></i></a>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <i class="bi bi-people" style="font-size:48px;color:var(--muted);display:block;margin-bottom:12px;" aria-label="Aucun utilisateur"></i>
+    <h3>Aucun utilisateur</h3>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
